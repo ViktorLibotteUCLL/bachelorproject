@@ -1,5 +1,10 @@
 # Backend
 
+### Requirements
+
+- Python
+- Pip
+
 ### Setup
 
 For running the backend, you will need to install pipenv using pip:
@@ -32,7 +37,15 @@ For adding new packages use:
 pipenv install <package name>
 ```
 
+> **Warning**
+>
+> Do not commit manual changes to the Pipfile.lock
+
 # Frontend
+
+### Requirements
+
+- npm
 
 ### Setup
 
