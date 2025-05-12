@@ -1,25 +1,50 @@
 # Backend
 
-## Setup
+### Setup
 
-for running the backend, you will need to install pipenv using pip
+For running the backend, you will need to install pipenv using pip:
 
-> `pip install pipenv`
+```bash
+pip install pipenv
+```
 
-afterwards, you use the following command to set up the project
+Afterwards, you use the following command to set up the project:
 
-> `pipenv install`
+```bash
+pipenv install
+```
 
-this will setup the virtual environment and the lockfile
+This will setup the virtual environment and install the used packages.
 
-## Dependency managment
+### Dependency managment
 
-for any dependencies that are added to the pipfile use:
+If new packages have been added to the lockfile, use:
 
-> `pipenv sync`
+```bash
+pipenv sync
+```
 
-## Adding new packages
+### Adding new packages
 
-for adding new packages use:
+For adding new packages use:
 
-> `pipenv install <package name>`
+```bash
+pipenv install <package name>
+```
+
+# Frontend
+
+### Setup
+
+Install the packages using npm:
+
+```bash
+npm install -g expo-cli
+npm i
+```
+
+### Starting the app
+
+```bash
+npx expo start
+```
