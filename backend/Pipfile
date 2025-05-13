@@ -7,10 +7,14 @@ name = "pypi"
 app = "python app.py"
 
 [packages]
-numpy = "*"
 pandas = "*"
 scikit-learn = "*"
 ultralytics = "*"
+opencv-python = "*"
+matplotlib = "*"
+neptune = "*"
+torch = "*"
+cuda-python = "*"
 
 [dev-packages]
 
