@@ -21,6 +21,14 @@ pipenv install
 
 This will setup the virtual environment and install the used packages.
 
+### Running the model
+
+The run the model, use:
+
+```bash
+pipenv run app
+```
+
 ### Dependency managment
 
 If new packages have been added to the lockfile, use:
