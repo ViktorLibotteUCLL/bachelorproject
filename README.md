@@ -2,7 +2,7 @@
 
 ### Requirements
 
-- Python
+- Python version 3.x
 - Pip
 
 ### Setup
