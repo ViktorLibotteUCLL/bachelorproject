@@ -61,3 +61,7 @@ npm i
 ```bash
 npx expo start
 ```
+
+> **Hint**
+>
+> If using the expo go app to test on a phone, if you cannot connect to the app, try starting with `--tunnel`.
