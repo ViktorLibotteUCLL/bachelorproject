@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "react_native_frontend",
-    "slug": "react_native_frontend",
+    "name": "Braillo",
+    "slug": "braillo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "reactnativefrontend",
+    "scheme": "braillo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
