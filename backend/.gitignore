@@ -1,6 +1,5 @@
 __pycache__/
 *.pyc
 .env
-Pipfile.lock
 /AI_model/runs
 /runs
