@@ -1,12 +1,19 @@
 import { Pressable, StyleSheet, View, Button, Text } from "react-native";
 import { useRef, useState } from "react";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import {
+  CameraView,
+  CameraType,
+  useCameraPermissions,
+  CameraCapturedPicture,
+} from "expo-camera";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [uri, setUri] = useState<string | null>(null);
   const ref = useRef<CameraView>(null);
+  const isFocused = useIsFocused();
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -29,45 +36,71 @@ export default function App() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
+  const uploadImage = async (photo: any) => {
+    const formData = new FormData();
+
+    formData.append("image", {
+      uri: photo.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    } as any);
+
+    try {
+      const response = await fetch("https://your-backend.com/upload", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const data = await response.json();
+      console.log("Upload success", data);
+    } catch (error) {
+      console.error("Upload failed", error);
+    }
+  };
+
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
-    console.log(photo);
-    setUri(photo?.uri);
+    uploadImage(photo);
   };
 
   return (
-    <View style={styles.container}>
-      <CameraView
-        style={styles.camera}
-        facing={facing}
-        ref={ref}
-        responsiveOrientationWhenOrientationLocked
-      >
-        <View style={styles.shutterContainer}>
-          <Pressable onPress={takePicture}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.shutterBtn,
-                  {
-                    opacity: pressed ? 0.5 : 1,
-                  },
-                ]}
-              >
+    isFocused && (
+      <View style={styles.container}>
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          ref={ref}
+          responsiveOrientationWhenOrientationLocked
+        >
+          <View style={styles.shutterContainer}>
+            <Pressable onPress={takePicture}>
+              {({ pressed }) => (
                 <View
                   style={[
-                    styles.shutterBtnInner,
+                    styles.shutterBtn,
                     {
-                      backgroundColor: "white",
+                      opacity: pressed ? 0.5 : 1,
                     },
                   ]}
-                />
-              </View>
-            )}
-          </Pressable>
-        </View>
-      </CameraView>
-    </View>
+                >
+                  <View
+                    style={[
+                      styles.shutterBtnInner,
+                      {
+                        backgroundColor: "white",
+                      },
+                    ]}
+                  />
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </CameraView>
+      </View>
+    )
   );
 }
 
