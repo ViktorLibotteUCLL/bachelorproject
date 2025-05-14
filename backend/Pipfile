@@ -15,7 +15,7 @@ name = "torchvision"
 
 [scripts]
 app = "python app.py"
-model = "python model.py"
+model = "python AI_model/model.py"
 
 [packages]
 numpy = "*"
