@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .env
+/data
 /datasets
 /runs
 *.pt
