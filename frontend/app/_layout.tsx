@@ -30,7 +30,7 @@ export default function RootLayout() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 5000);
   }, []);
 
   useEffect(() => {
