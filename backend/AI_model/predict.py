@@ -8,15 +8,20 @@ model = YOLO(
 
 def get_instances(image):
     results = model(image)
+    # print(type(results[0]))
     result = results[0]
     class_names = model.names
-    output = {}
+    output = []
     for b in result.boxes:
+        # print(b)
         class_id = int(b.cls[0])
         label = class_names[class_id]
-        xyxy = b.xyxy[0].tolist()
-        output[label] = xyxy
-        print(label)
+        # print(label)
+        xyxy = b.xyxy[0][:2].tolist()
+        data = [label, round(xyxy[0] / 100), round(xyxy[1] / 100)]
+        output.append(data)
+        # print(label)
+
     return output
 
 
