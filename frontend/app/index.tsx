@@ -7,7 +7,6 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [uri, setUri] = useState<string | null>(null);
   const ref = useRef<CameraView>(null);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
