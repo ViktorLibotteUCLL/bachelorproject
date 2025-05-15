@@ -4,7 +4,7 @@
     "slug": "braillo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "braillo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
