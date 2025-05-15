@@ -1,19 +1,20 @@
 import { Pressable, StyleSheet, View, Button, Text } from "react-native";
-import { useRef, useState } from "react";
-import {
-  CameraView,
-  CameraType,
-  useCameraPermissions,
-  CameraCapturedPicture,
-} from "expo-camera";
+import { useEffect, useRef, useState } from "react";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [uri, setUri] = useState<string | null>(null);
   const ref = useRef<CameraView>(null);
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // simulate loading
+    setTimeout(() => setIsLoading(false), 2000);
+  }, []);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -67,12 +68,14 @@ export default function App() {
   };
 
   return (
-    isFocused && (
+    (isLoading && <LoadingScreen />) ||
+    (isFocused && (
       <View style={styles.container}>
         <CameraView
           style={styles.camera}
           facing={facing}
           ref={ref}
+          flash={"auto"}
           responsiveOrientationWhenOrientationLocked
         >
           <View style={styles.shutterContainer}>
@@ -100,7 +103,7 @@ export default function App() {
           </View>
         </CameraView>
       </View>
-    )
+    ))
   );
 }
 
