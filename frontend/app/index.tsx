@@ -1,11 +1,6 @@
 import { Pressable, StyleSheet, View, Button, Text } from "react-native";
 import { useRef, useState } from "react";
-import {
-  CameraView,
-  CameraType,
-  useCameraPermissions,
-  CameraCapturedPicture,
-} from "expo-camera";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 
 export default function App() {
@@ -73,6 +68,7 @@ export default function App() {
           style={styles.camera}
           facing={facing}
           ref={ref}
+          flash={"auto"}
           responsiveOrientationWhenOrientationLocked
         >
           <View style={styles.shutterContainer}>
