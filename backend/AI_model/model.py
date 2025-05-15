@@ -1,9 +1,15 @@
 from ultralytics import YOLO
 
-model = YOLO("yolov8n.pt")
 
-results = model.train(data="datasets/data.yaml", epochs=30, device="cpu", imgsz=640)
+def main():
+    model = YOLO("yolo11n.pt")
 
-val_results = model.val()
+    results = model.train(data="datasets/data.yaml", epochs=15, imgsz=320)
 
-exported_model = model.export(format="onnx")
+    val_results = model.val()
+
+    exported_model = model.export(format="onnx")
+
+
+if __name__ == "__main__":
+    main()
