@@ -3,15 +3,28 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://download.pytorch.org/whl/cu121/"
+verify_ssl = false
+name = "pytorch"
+
+[[source]]
+url = "https://download.pytorch.org/whl/cu121/"          
+verify_ssl = false
+name = "torchvision"
+
 [scripts]
 app = "python app.py"
+model = "python AI_model/model.py"
 
 [packages]
 numpy = "*"
 pandas = "*"
 scikit-learn = "*"
-torch = "*"
 ultralytics = "*"
+torch = {version="*", index="pytorch"}
+torchvision = {version="*", index="torchvision"}
+torchaudio = "*"
 
 [dev-packages]
 
