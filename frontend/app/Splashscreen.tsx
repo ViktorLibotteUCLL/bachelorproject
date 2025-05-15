@@ -9,7 +9,7 @@ const SplashScreen = () => {
 
     Animated.sequence([
         Animated.timing(imagePosistionB, {
-            toValue: { x: 75, y: 0 },
+            toValue: { x: 60, y: 0 },
             duration: 1000,
             useNativeDriver: true,
         }),
@@ -20,7 +20,7 @@ const SplashScreen = () => {
                 useNativeDriver: true,
             }),
             Animated.timing(imagePosistionRaillo, {
-                toValue: { x: -45, y: 0 },
+                toValue: { x: -60, y: 0 },
                 duration: 1000,
                 useNativeDriver: true,
             }),
