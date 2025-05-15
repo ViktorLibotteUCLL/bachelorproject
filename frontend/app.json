@@ -33,7 +33,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/Braillo_splashscreen_lightmode.png",
+          "image": "./assets/images/Splashscreen_B_lightmode_no_bg.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
