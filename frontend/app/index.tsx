@@ -4,6 +4,7 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
+
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
@@ -47,12 +48,11 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("https://your-backend.com/upload", {
+      const response = await fetch("https://api.braillo.tech/upload", {
         method: "POST",
         body: formData,
         headers: {
-          "Content-Type": "multipart/form-data",
-          'api-token': process.env.API_TOKEN as string,
+          'api-token': process.env.EXPO_PUBLIC_API_TOKEN as string,
         },
       });
       const data = await response.json();
