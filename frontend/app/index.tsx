@@ -52,9 +52,9 @@ export default function App() {
         body: formData,
         headers: {
           "Content-Type": "multipart/form-data",
+          'api-token': process.env.API_TOKEN as string,
         },
       });
-
       const data = await response.json();
       console.log("Upload success", data);
     } catch (error) {
