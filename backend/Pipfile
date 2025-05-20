@@ -14,6 +14,7 @@ verify_ssl = false
 name = "torchvision"
 
 [scripts]
+server = "fastapi dev main.py"
 app = "python app.py"
 model = "python AI_model/model.py"
 
@@ -25,6 +26,7 @@ ultralytics = "*"
 torch = {version="*", index="pytorch"}
 torchvision = {version="*", index="torchvision"}
 torchaudio = "*"
+fastapi = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
