@@ -35,8 +35,8 @@ const TranslationScreen = () => {
             </TouchableOpacity>
         </View>
         <View style={styles.textContainer}>
-            <Text style={styles.text}>
-            Translations
+            <Text style={styles.text}> Translations
+            {translations}
             </Text>
         </View>
       {/* {translations.map((translation) => (
@@ -75,14 +75,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         width: "90%",
-        height: "auto",
+        height: "80%",
         borderColor: "#ce2f4b",
         borderWidth: 2,
     },
     text: {
-        fontSize: 24,
+        fontSize: 19,
         fontWeight: "bold",
-        padding: 20
     }
 });
 
