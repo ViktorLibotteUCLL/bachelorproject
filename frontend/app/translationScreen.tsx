@@ -1,31 +1,35 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const TranslationScreen = () => {
-  const [translations, setTranslations] = useState([]);
-  const [loading, setLoading] = useState(true);
+    const params = useLocalSearchParams();
+    const [translations, setTranslations] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTranslations = async () => {
-      try {
-        const response = await fetch("https://api.braillo.tech/upload");
-        const data = await response.json();
-        setTranslations(data);
-      } catch (error) {
-        console.error("Error fetching translations:", error);
-      } finally {
+    useEffect(() => {
+        if (params.data){
+            try {
+                // const response = await fetch("https://devapi.braillo.tech/upload");
+                // const data = await response.json();
+                const data = JSON.parse(params.data as string);
+                // setTranslations(Array.isArray(parsed) ? parsed : [parsed]);
+                setTranslations(data["response"]);
+                console.log("Translations fetched successfully:", data);
+            } catch (error) {
+                console.error("Error fetching translations:", error);
+            } finally {
+                setTimeout(() => setLoading(false), 2000);
+            }
+        };
+
         setTimeout(() => setLoading(false), 2000);
-      }
-    };
+    }, [params.data]);
 
-    fetchTranslations();
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
+    if (loading) {
+        return <LoadingScreen />;
+    }
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>

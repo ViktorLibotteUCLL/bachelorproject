@@ -49,7 +49,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("https://api.braillo.tech/upload", {
+      const response = await fetch("https://devapi.braillo.tech/upload", {
         method: "POST",
         body: formData,
         headers: {
@@ -58,6 +58,7 @@ export default function App() {
       });
       const data = await response.json();
       console.log("Upload success", data);
+      router.push({ pathname: '/translationScreen', params: { data: JSON.stringify(data) } });
     } catch (error) {
       console.error("Upload failed", error);
     }
@@ -65,6 +66,7 @@ export default function App() {
 
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
+    setIsLoading(true);
     await uploadImage(photo);
     router.push('/translationScreen');
   };
