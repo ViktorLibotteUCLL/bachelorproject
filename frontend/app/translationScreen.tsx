@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     headingContainer: {
-        alignSelf: "flex-start",
+        marginTop: 10,
+        marginBottom: 30,
     },
     image: {
         width: 60,
         height: 40,
         borderRadius: 10,
-        marginBottom: 20,
     },
     textContainer: {
         alignSelf: "center",
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         width: "90%",
+        height: "auto",
         borderColor: "#ce2f4b",
         borderWidth: 2,
     },
