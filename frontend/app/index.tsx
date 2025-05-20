@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { Link, router } from 'expo-router';
 
 
 export default function App() {
@@ -64,7 +65,8 @@ export default function App() {
 
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
-    uploadImage(photo);
+    await uploadImage(photo);
+    router.push('/translationScreen');
   };
 
   return (
