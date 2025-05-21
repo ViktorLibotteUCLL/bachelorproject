@@ -10,12 +10,7 @@ export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // simulate loading
-    setTimeout(() => setIsLoading(false), 2000);
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!permission) {
     // Camera permissions are still loading.
