@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { Link, router } from 'expo-router';
-
+import { Link, router } from "expo-router";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -53,12 +52,12 @@ export default function App() {
         method: "POST",
         body: formData,
         headers: {
-          'api-token': process.env.EXPO_PUBLIC_API_TOKEN as string,
+          "api-token": process.env.EXPO_PUBLIC_API_TOKEN as string,
         },
       });
       const data = await response.json();
       console.log("Upload success", data);
-      router.push({ pathname: '/translationScreen', params: { data: JSON.stringify(data) } });
+      return data;
     } catch (error) {
       console.error("Upload failed", error);
     }
@@ -67,8 +66,12 @@ export default function App() {
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
     setIsLoading(true);
-    await uploadImage(photo);
-    router.push('/translationScreen');
+    const response = await uploadImage(photo);
+    console.log("Response from uploadImage", response);
+    router.push({
+      pathname: "/translationScreen",
+      params: response,
+    });
   };
 
   return (
