@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
@@ -14,6 +15,21 @@ const TranslationScreen = () => {
   const params = useLocalSearchParams();
   const [translations, setTranslations] = useState(params["response"]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!translations || translations === "undefined" || translations === "") {
+      handleOpenAlert();
+    }
+  }, [translations]);
+
+  const handleOpenAlert = () => {
+    Alert.alert(
+      "Error",
+      "No translation available. Please try again.",
+      [{ text: "OK", onPress: () => router.push("/") }],
+      { cancelable: false }
+    );
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
