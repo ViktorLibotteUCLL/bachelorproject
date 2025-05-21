@@ -131,13 +131,16 @@ const styles = StyleSheet.create({
   },
   shutterContainer: {
     position: "absolute",
-    bottom: 44,
+    bottom: 0,
     left: 0,
     width: "100%",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
     paddingHorizontal: 30,
+    backgroundColor: "black",
+    height: 140,
+    paddingBottom: 30,
   },
   shutterBtn: {
     backgroundColor: "transparent",
