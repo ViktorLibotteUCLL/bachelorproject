@@ -77,7 +77,9 @@ async def upload_image(image: UploadFile = File(...)):
     image = await image.read()
     pil_image = Image.open(io.BytesIO(image)).convert("RGB")
     response = get_instances(pil_image)
-    return {"response": response}
+    prediction = "".join([char[0] for char in response])
+    print(prediction)
+    return {"response": prediction}
 
 
 @app.get("/items/{item_id}")
