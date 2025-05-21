@@ -14,7 +14,7 @@ app = FastAPI()
 from ultralytics import YOLO
 
 model = YOLO(
-    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train17//weights//best.pt"
+    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_1605//best.pt"
 )
 
 
