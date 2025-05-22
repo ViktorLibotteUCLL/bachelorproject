@@ -4,6 +4,8 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Link, router } from "expo-router";
+import Header from "@/components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -73,6 +75,7 @@ export default function App() {
   return (
     isFocused && (
       <View style={styles.container}>
+        <Header />
         <CameraView
           style={styles.camera}
           facing={facing}
@@ -103,19 +106,19 @@ export default function App() {
               )}
             </Pressable>
           </View>
-          {isLoading && (
-            <View
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 10,
-              }}
-            >
-              <LoadingScreen />
-            </View>
-          )}
         </CameraView>
+        {isLoading && (
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+            }}
+          >
+            <LoadingScreen />
+          </View>
+        )}
       </View>
     )
   );
@@ -124,7 +127,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",

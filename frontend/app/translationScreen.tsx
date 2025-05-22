@@ -20,7 +20,7 @@ const TranslationScreen = () => {
       <View style={styles.headingContainer}>
         <TouchableOpacity onPress={() => router.push("/")}>
           <Image
-            source={require("../assets/images/returnButton.png")}
+            source={require("../assets/images/returnArrow.png")}
             style={styles.image}
           />
         </TouchableOpacity>
