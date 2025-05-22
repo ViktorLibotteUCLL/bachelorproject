@@ -4,6 +4,8 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Link, router } from "expo-router";
+import Header from "@/components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -72,39 +74,40 @@ export default function App() {
   return (
     (isLoading && <LoadingScreen />) ||
     (isFocused && (
-      <View style={styles.container}>
-        <CameraView
-          style={styles.camera}
-          facing={facing}
-          ref={ref}
-          flash={"auto"}
-          responsiveOrientationWhenOrientationLocked
-        >
-          <View style={styles.shutterContainer}>
-            <Pressable onPress={takePicture}>
-              {({ pressed }) => (
-                <View
-                  style={[
-                    styles.shutterBtn,
-                    {
-                      opacity: pressed ? 0.5 : 1,
-                    },
-                  ]}
-                >
+        <View style={styles.container}>
+          <Header />
+          <CameraView
+            style={styles.camera}
+            facing={facing}
+            ref={ref}
+            flash={"auto"}
+            responsiveOrientationWhenOrientationLocked
+          >
+            <View style={styles.shutterContainer}>
+              <Pressable onPress={takePicture}>
+                {({ pressed }) => (
                   <View
                     style={[
-                      styles.shutterBtnInner,
+                      styles.shutterBtn,
                       {
-                        backgroundColor: "white",
+                        opacity: pressed ? 0.5 : 1,
                       },
                     ]}
-                  />
-                </View>
-              )}
-            </Pressable>
-          </View>
-        </CameraView>
-      </View>
+                  >
+                    <View
+                      style={[
+                        styles.shutterBtnInner,
+                        {
+                          backgroundColor: "white",
+                        },
+                      ]}
+                    />
+                  </View>
+                )}
+              </Pressable>
+            </View>
+          </CameraView>
+        </View>
     ))
   );
 }
@@ -112,7 +115,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
   },
