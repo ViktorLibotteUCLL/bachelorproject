@@ -54,6 +54,7 @@ export default function RootLayout() {
             <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="+not-found" />
             <Stack.Screen name="translationScreen" options={{ headerShown: false }} />
+            <Stack.Screen name="settingsScreen" options={{ headerShown: false }} />
           </Stack>
           <StatusBar style="auto" />
         </>
