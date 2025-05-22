@@ -31,10 +31,6 @@ export default function App() {
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  }
-
   const uploadImage = async (photo: any) => {
     const formData = new FormData();
 
@@ -61,10 +57,15 @@ export default function App() {
   };
 
   const takePicture = async () => {
-    const photo = await ref.current?.takePictureAsync();
     setIsLoading(true);
+    const photo = await ref.current?.takePictureAsync({ shutterSound: false });
+    console.log("Photo taken", photo);
     const response = await uploadImage(photo);
-    console.log("Response from uploadImage", response);
+    if (!response || response["response"] === "") {
+      setIsLoading(false);
+      return alert("No braille detected. Please try again.");
+    }
+    setIsLoading(false);
     router.push({
       pathname: "/translationScreen",
       params: response,
@@ -72,8 +73,7 @@ export default function App() {
   };
 
   return (
-    (isLoading && <LoadingScreen />) ||
-    (isFocused && (
+    isFocused && (
         <View style={styles.container}>
           <Header />
           <CameraView
@@ -81,7 +81,7 @@ export default function App() {
             facing={facing}
             ref={ref}
             flash={"auto"}
-            responsiveOrientationWhenOrientationLocked
+            animateShutter={false}
           >
             <View style={styles.shutterContainer}>
               <Pressable onPress={takePicture}>
@@ -106,9 +106,21 @@ export default function App() {
                 )}
               </Pressable>
             </View>
+          {isLoading && (
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+              }}
+            >
+              <LoadingScreen />
+            </View>
+          )}
           </CameraView>
         </View>
-    ))
+    )
   );
 }
 
@@ -118,6 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   message: {
     textAlign: "center",
@@ -160,4 +173,11 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 50,
   },
+  // loadingOverlay: {
+  //   ...StyleSheet.absoluteFillObject,
+  //   backgroundColor: "rgba(0, 0, 0, 0.5)",
+  // alignItems: "center",
+  // justifyContent: "center",
+  // zIndex: 10,
+  // },
 });

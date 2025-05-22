@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+    width: "100%",
   },
   text: {
     marginTop: 16,
