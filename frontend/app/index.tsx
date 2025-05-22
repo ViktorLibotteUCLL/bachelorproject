@@ -74,52 +74,52 @@ export default function App() {
 
   return (
     isFocused && (
-        <View style={styles.container}>
-          <Header />
-          <CameraView
-            style={styles.camera}
-            facing={facing}
-            ref={ref}
-            flash={"auto"}
-            animateShutter={false}
-          >
-            <View style={styles.shutterContainer}>
-              <Pressable onPress={takePicture}>
-                {({ pressed }) => (
+      <View style={styles.container}>
+        <Header />
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          ref={ref}
+          flash={"auto"}
+          animateShutter={false}
+        >
+          <View style={styles.shutterContainer}>
+            <Pressable onPress={takePicture}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    styles.shutterBtn,
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                    },
+                  ]}
+                >
                   <View
                     style={[
-                      styles.shutterBtn,
+                      styles.shutterBtnInner,
                       {
-                        opacity: pressed ? 0.5 : 1,
+                        backgroundColor: "white",
                       },
                     ]}
-                  >
-                    <View
-                      style={[
-                        styles.shutterBtnInner,
-                        {
-                          backgroundColor: "white",
-                        },
-                      ]}
-                    />
-                  </View>
-                )}
-              </Pressable>
-            </View>
-          {isLoading && (
-            <View
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 10,
-              }}
-            >
-              <LoadingScreen />
-            </View>
-          )}
-          </CameraView>
-        </View>
+                  />
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </CameraView>
+        {isLoading && (
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+            }}
+          >
+            <LoadingScreen />
+          </View>
+        )}
+      </View>
     )
   );
 }
@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
   },
   message: {
     textAlign: "center",
