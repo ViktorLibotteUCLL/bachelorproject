@@ -106,6 +106,18 @@ export default function App() {
               )}
             </Pressable>
           </View>
+          {isLoading && (
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+              }}
+            >
+              <LoadingScreen />
+            </View>
+          )}
         </CameraView>
         {isLoading && (
           <View
@@ -130,6 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   message: {
     textAlign: "center",
