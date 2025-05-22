@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { use, useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import SplashScreen from "./Splashscreen";
@@ -30,7 +30,7 @@ export default function RootLayout() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 6000);
+    }, 4000);
   }, []);
 
   useEffect(() => {
@@ -46,14 +46,17 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {loading? (
+      {loading ? (
         <SplashScreen />
       ) : (
         <>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-            <Stack.Screen name="translationScreen" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen
+              name="translationScreen"
+              options={{ headerShown: false }}
+            />
           </Stack>
           <StatusBar style="auto" />
         </>
