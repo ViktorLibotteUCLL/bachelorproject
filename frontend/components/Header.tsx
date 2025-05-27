@@ -6,7 +6,7 @@ import { Link, router } from 'expo-router';
 const Header = () => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => router.push("/")}>
+            <TouchableOpacity onPress={() => router.push("/historyScreen")}>
                 <Image
                     source={require("../assets/images/history.png")}
                     style={styles.icons}
