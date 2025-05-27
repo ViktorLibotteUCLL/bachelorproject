@@ -9,23 +9,41 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import CustomDropdown from "@/components/Dropdown";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 
 export default function historyScreen() {
-    return (
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View style={styles.headingContainer}>
-                <TouchableOpacity onPress={() => router.push("/")}>
-                    <Image
-                        source={require("../assets/images/returnArrow.png")}
-                        style={styles.image}
-                    />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.container}>
-                <Text style={styles.title}>History</Text>
-            </View>
-        </ScrollView>
-    );
+  const [history, setHistory] = useState([]);
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const jsonHistory = await AsyncStorage.getItem("history");
+      setHistory(jsonHistory != null ? JSON.parse(jsonHistory) : []);
+      console.log(history);
+    };
+    fetchHistory();
+  }, []);
+
+  return (
+    <ScrollView contentContainerStyle={styles.contentContainer}>
+      <View style={styles.headingContainer}>
+        <TouchableOpacity onPress={() => router.push("/")}>
+          <Image
+            source={require("../assets/images/returnArrow.png")}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>History</Text>
+        {history.map((element) => (
+          <Text key={element["timestamp"]} style={styles.text}>
+            {element["timestamp"]} {element["response"]}
+          </Text>
+        ))}
+        
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -56,5 +74,6 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontSize: 16,
+    paddingBottom: 10,
   },
 });
