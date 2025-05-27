@@ -6,6 +6,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { Link, router } from "expo-router";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -41,7 +42,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("https://devapi.braillo.tech/upload", {
+      const response = await fetch("https://api.braillo.tech/upload", {
         method: "POST",
         body: formData,
         headers: {
@@ -50,6 +51,17 @@ export default function App() {
       });
       const data = await response.json();
       console.log("Upload success", data);
+      if (data["response"]) {
+        console.log("hello");
+        const jsonHistory = await AsyncStorage.getItem("history");
+        console.log(jsonHistory);
+        let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
+        // history[data["timestamp"]] = data["response"];
+        history.push(data);
+        console.log(history);
+        await AsyncStorage.setItem("history", JSON.stringify(history));
+      }
+
       return data;
     } catch (error) {
       console.error("Upload failed", error);
