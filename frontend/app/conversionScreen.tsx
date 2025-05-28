@@ -46,7 +46,7 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
-          accessibilityLabel="The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a special character or space is present."
+          accessibilityLabel="This table shows the conversion of numbers to their corresponding characters in the Braille system. Each number is represented by a unique combination of raised dots. The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a or space is present."
         />
         <Text style={[styles.text, { marginTop: 20, marginBottom: 30, borderBottomWidth: 1,
               borderColor: "#ce2f4b", }]}>
@@ -63,7 +63,7 @@ const ConversionScreen = () => {
               marginBottom: 50,
             },
           ]}
-          accessibilityLabel="The capital indicator indicates a capital, if one indicator is present only the next character is capitalised. If two indicators are present every following character is capitalised until either a space or the indicator to mark the end of capitalisation is present."
+          accessibilityLabel="This table shows the conversion of special characters to their corresponding characters in the Braille system. Each special character is represented by a unique combination of raised dots. The capital indicator indicates a capital, if one indicator is present only the next character is capitalised. If two indicators are present every following character is capitalised until either a space or the indicator to mark the end of capitalisation is present."
         />
       </ScrollView>
     </View>
