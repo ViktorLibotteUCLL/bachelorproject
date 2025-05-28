@@ -33,6 +33,7 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
+          accessibilityLabel="This table shows the conversion of letters to their corresponding characters in the Braille system. Each letter is represented by a unique combination of raised dots."
         />
         <Text style={[styles.text, { marginBottom: 20, borderBottomWidth: 1,
               borderColor: "#ce2f4b" }]}>Numbers</Text>
@@ -45,10 +46,11 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
+          accessibilityLabel="This table shows the conversion of numbers to their corresponding characters in the Braille system. Each number is represented by a unique combination of raised dots. The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a or space is present."
         />
         <Text style={[styles.text, { marginTop: 20, marginBottom: 30, borderBottomWidth: 1,
               borderColor: "#ce2f4b", }]}>
-          Punctuation Marks
+          Special Characters
         </Text>
         <Image
           source={require("../assets/images/punctuationMarks.png")}
@@ -61,32 +63,13 @@ const ConversionScreen = () => {
               marginBottom: 50,
             },
           ]}
+          accessibilityLabel="This table shows the conversion of special characters to their corresponding characters in the Braille system. Each special character is represented by a unique combination of raised dots. The capital indicator indicates a capital, if one indicator is present only the next character is capitalised. If two indicators are present every following character is capitalised until either a space or the indicator to mark the end of capitalisation is present."
         />
       </ScrollView>
     </View>
   );
 };
 
-// const styles = StyleSheet.create({
-//   contentContainer: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     padding: 20,
-//   },
-//   headingContainer: {
-//     marginTop: 10,
-//     marginBottom: 30,
-//   },
-//   image: {
-//     width: 60,
-//     height: 40,
-//     borderRadius: 10,
-//   },
-//   text: {
-//     fontSize: 19,
-//     fontWeight: "bold",
-//   },
-// });
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
