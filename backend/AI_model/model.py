@@ -7,7 +7,7 @@ def main():
     results = model.train(
         data="datasets/data.yaml",
         epochs=200,
-        patience=50,
+        patience=10,
         name="cleaned_noflip",
         fliplr=0.0,
         flipud=0.0,
