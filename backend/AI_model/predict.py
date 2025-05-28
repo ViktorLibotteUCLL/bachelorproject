@@ -1,41 +1,29 @@
 from ultralytics import YOLO
+import math
 
-imagefile = "C://Users//Marthe//Downloads//image6.jpg"
+imagefile = "C:/Users/basti/Downloads/image2.jpg"
 model = YOLO(
-    "C://Users//Marthe//Documents//school//bp//bachelorproject//backend//runs//detect//train14//weights//best.pt"
+    "C:/Users/basti/Documents/School/3de_jaar/Bachelorproef/bachelorproject/backend/runs/detect/train2705/best.pt"
 )
 
 
-def coord_y(i):
-    return i[2]
-
-
-def coord_x(i):
-    return i[1]
-
-
 def get_instances(image):
-    results = model(image)
-    # print(type(results[0]))
-    result = results[0]
+    results = model(image)[0]
+    results.show()
+    results.save(filename="result.jpg")
     class_names = model.names
     output = []
-    for b in result.boxes:
-        # print(b)
-        class_id = int(b.cls[0])
+    i = sorted(results.boxes.data.tolist(), key=lambda result: (math.floor(result[1]/500), result[0]))
+    for result in i:
+        x1, y1, x2, y2, score, class_id = result
         label = class_names[class_id]
-        # print(label)
-        xyxy = b.xyxy[0][:2].tolist()
-        data = [label, round(xyxy[0] / 50), round(xyxy[1] / 50)]
-        output.append(data)
-
-        output.sort(reverse=False, key=coord_y)
-        output.sort(reverse=False, key=coord_x)
-
-        # print(label)
-    result.show()
-    result.save(filename="result.jpg")
+        output.append([label, x1, y1])
+    #print(output)
     return output
+    
+    
+            
+    
 
 
-print(get_instances(imagefile))
+get_instances(imagefile)
