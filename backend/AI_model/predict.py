@@ -34,16 +34,16 @@ model = YOLO(
 def get_instances(image):
     results = model(image)[0]
     results.show()
+    results.save(filename="result.jpg")
     class_names = model.names
     output = []
-    a = results.boxes.data.tolist()
-    i = sorted(a, key=lambda result: (math.floor(result[1]/500), result[0]))
-    
+    i = sorted(results.boxes.data.tolist(), key=lambda result: (math.floor(result[1]/500), result[0]))
     for result in i:
         x1, y1, x2, y2, score, class_id = result
         label = class_names[class_id]
-        output.append(label)
-        print(x1, math.floor(y1/500), label)
+        output.append([label, x1, y1])
+    #print(output)
+    return output
     
     
             
