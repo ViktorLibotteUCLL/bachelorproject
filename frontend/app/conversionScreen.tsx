@@ -67,26 +67,6 @@ const ConversionScreen = () => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   contentContainer: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     padding: 20,
-//   },
-//   headingContainer: {
-//     marginTop: 10,
-//     marginBottom: 30,
-//   },
-//   image: {
-//     width: 60,
-//     height: 40,
-//     borderRadius: 10,
-//   },
-//   text: {
-//     fontSize: 19,
-//     fontWeight: "bold",
-//   },
-// });
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
