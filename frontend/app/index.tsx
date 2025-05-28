@@ -42,7 +42,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("https://api.braillo.tech/upload", {
+      const response = await fetch("https://devapi.braillo.tech/upload", {
         method: "POST",
         body: formData,
         headers: {
