@@ -14,9 +14,11 @@ verify_ssl = false
 name = "torchvision"
 
 [scripts]
-server = "fastapi dev main.py"
-app = "python app.py"
+dev = "fastapi dev main.py"
+server = "uvicorn main:app --host 0.0.0.0 --port 8000"
+tunnel = "cloudflared tunnel run fastapi-tunnel"
 model = "python AI_model/model.py"
+validate = "python AI_model/validate.py"
 
 [packages]
 numpy = "*"

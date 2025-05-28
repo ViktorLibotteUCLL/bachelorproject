@@ -14,8 +14,9 @@ def main():
     )
     print(results)
     val_results = model.val()
-    print(val_results)
+    return val_results
 
 
 if __name__ == "__main__":
-    main()
+    results = main()
+    print(results)

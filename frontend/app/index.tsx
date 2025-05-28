@@ -3,19 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
-
+import { Link, router } from "expo-router";
+import Header from "@/components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // simulate loading
-    setTimeout(() => setIsLoading(false), 2000);
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -34,10 +32,6 @@ export default function App() {
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  }
-
   const uploadImage = async (photo: any) => {
     const formData = new FormData();
 
@@ -52,31 +46,54 @@ export default function App() {
         method: "POST",
         body: formData,
         headers: {
-          'api-token': process.env.EXPO_PUBLIC_API_TOKEN as string,
+          "api-token": process.env.EXPO_PUBLIC_API_TOKEN as string,
         },
       });
       const data = await response.json();
       console.log("Upload success", data);
+      if (data["response"]) {
+        console.log("hello");
+        const jsonHistory = await AsyncStorage.getItem("history");
+        console.log(jsonHistory);
+        let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
+        // history[data["timestamp"]] = data["response"];
+        history.push(data);
+        console.log(history);
+        await AsyncStorage.setItem("history", JSON.stringify(history));
+      }
+
+      return data;
     } catch (error) {
       console.error("Upload failed", error);
     }
   };
 
   const takePicture = async () => {
-    const photo = await ref.current?.takePictureAsync();
-    uploadImage(photo);
+    setIsLoading(true);
+    const photo = await ref.current?.takePictureAsync({ shutterSound: false });
+    console.log("Photo taken", photo);
+    const response = await uploadImage(photo);
+    if (!response || response["response"] === "") {
+      setIsLoading(false);
+      return alert("No braille detected. Please try again.");
+    }
+    setIsLoading(false);
+    router.push({
+      pathname: "/translationScreen",
+      params: response,
+    });
   };
 
   return (
-    (isLoading && <LoadingScreen />) ||
-    (isFocused && (
+    isFocused && (
       <View style={styles.container}>
+        <Header />
         <CameraView
           style={styles.camera}
           facing={facing}
           ref={ref}
           flash={"auto"}
-          responsiveOrientationWhenOrientationLocked
+          animateShutter={false}
         >
           <View style={styles.shutterContainer}>
             <Pressable onPress={takePicture}>
@@ -102,17 +119,30 @@ export default function App() {
             </Pressable>
           </View>
         </CameraView>
+        {isLoading && (
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+            }}
+          >
+            <LoadingScreen />
+          </View>
+        )}
       </View>
-    ))
+    )
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   message: {
     textAlign: "center",
@@ -129,13 +159,16 @@ const styles = StyleSheet.create({
   },
   shutterContainer: {
     position: "absolute",
-    bottom: 44,
+    bottom: 0,
     left: 0,
     width: "100%",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
     paddingHorizontal: 30,
+    backgroundColor: "black",
+    height: 140,
+    paddingBottom: 30,
   },
   shutterBtn: {
     backgroundColor: "transparent",
@@ -152,4 +185,11 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 50,
   },
+  // loadingOverlay: {
+  //   ...StyleSheet.absoluteFillObject,
+  //   backgroundColor: "rgba(0, 0, 0, 0.5)",
+  // alignItems: "center",
+  // justifyContent: "center",
+  // zIndex: 10,
+  // },
 });
