@@ -1,6 +1,7 @@
+import datetime
 import io
 from typing import Union
-from fastapi import FastAPI, File, Request, HTTPException, UploadFile
+from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 import os
 from dotenv import load_dotenv
@@ -14,7 +15,8 @@ app = FastAPI()
 from ultralytics import YOLO
 
 model = YOLO(
-    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_1605//best.pt"
+    # "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_1605//best.pt"
+    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_2705//best.pt"
 )
 
 
@@ -26,25 +28,75 @@ def coord_x(i):
     return i[1]
 
 
+# def get_instances(image):
+#     results = model(image)
+#     # print(type(results[0]))
+#     result = results[0]
+#     class_names = model.names
+#     output = []
+#     for b in result.boxes:
+#         # print(b)
+#         class_id = int(b.cls[0])
+#         label = class_names[class_id]
+#         # print(label)
+#         xyxy = b.xyxy[0][:2].tolist()
+#         data = [label, round(xyxy[0] / 50), round(xyxy[1] / 50)]
+#         output.append(data)
+
+#         output.sort(reverse=False, key=coord_y)
+#         output.sort(reverse=False, key=coord_x)
+
+#         # print(label)
+#     result.show()
+#     result.save(filename="result.jpg")
+#     return output
+
+import torch
+import torchvision.ops as ops
+
+
+def apply_nms(boxes, scores, iou_threshold=0.5):
+    return ops.nms(boxes, scores.to(boxes.device), iou_threshold)
+
+
 def get_instances(image):
     results = model(image)
-    # print(type(results[0]))
     result = results[0]
     class_names = model.names
     output = []
+
+    boxes = []
+    scores = []
+    labels = []
+
     for b in result.boxes:
-        # print(b)
         class_id = int(b.cls[0])
         label = class_names[class_id]
-        # print(label)
-        xyxy = b.xyxy[0][:2].tolist()
-        data = [label, round(xyxy[0] / 50), round(xyxy[1] / 50)]
-        output.append(data)
+        xyxy = b.xyxy[0]
+        score = b.conf[0]
 
-        output.sort(reverse=False, key=coord_y)
-        output.sort(reverse=False, key=coord_x)
+        boxes.append(xyxy)
+        scores.append(score)
+        labels.append(label)
 
-        # print(label)
+    boxes = torch.stack(boxes)
+    scores = torch.tensor(scores)
+
+    keep = apply_nms(boxes, scores, iou_threshold=0.5)
+
+    for i in keep:
+        xyxy = boxes[i][:2].tolist()
+        x = round(xyxy[0])
+        y = round(xyxy[1])
+        output.append((labels[i], x, y))
+
+    # Sort in reading order
+    def reading_order_key(item):
+        label, x, y = item
+        return (round(y / 50), x)
+
+    output.sort(key=reading_order_key)
+
     result.show()
     result.save(filename="result.jpg")
     return output
@@ -78,8 +130,7 @@ async def upload_image(image: UploadFile = File(...)):
     pil_image = Image.open(io.BytesIO(image)).convert("RGB")
     response = get_instances(pil_image)
     prediction = "".join([char[0] for char in response])
-    print(prediction)
-    return {"response": prediction}
+    return {"response": prediction, "timestamp": datetime.datetime.now().isoformat()}
 
 
 @app.get("/items/{item_id}")
