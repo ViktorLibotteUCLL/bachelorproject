@@ -33,6 +33,7 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
+          accessibilityLabel="This table shows the conversion of letters to their corresponding characters in the Braille system. Each letter is represented by a unique combination of raised dots."
         />
         <Text style={[styles.text, { marginBottom: 20, borderBottomWidth: 1,
               borderColor: "#ce2f4b" }]}>Numbers</Text>
@@ -45,10 +46,11 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
+          accessibilityLabel="The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a special character or space is present."
         />
         <Text style={[styles.text, { marginTop: 20, marginBottom: 30, borderBottomWidth: 1,
               borderColor: "#ce2f4b", }]}>
-          Punctuation Marks
+          Special Characters
         </Text>
         <Image
           source={require("../assets/images/punctuationMarks.png")}
@@ -61,6 +63,7 @@ const ConversionScreen = () => {
               marginBottom: 50,
             },
           ]}
+          accessibilityLabel="The capital indicator indicates a capital, if one indicator is present only the next character is capitalised. If two indicators are present every following character is capitalised until either a space or the indicator to mark the end of capitalisation is present."
         />
       </ScrollView>
     </View>
