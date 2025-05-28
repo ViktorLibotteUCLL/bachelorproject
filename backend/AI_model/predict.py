@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+import math
 
 imagefile = "C:/Users/basti/Downloads/image2.jpg"
 model = YOLO(
@@ -35,12 +36,16 @@ def get_instances(image):
     results.show()
     class_names = model.names
     output = []
-    for result in results.boxes.data.tolist():
+    a = results.boxes.data.tolist()
+    i = sorted(a, key=lambda result: (math.floor(result[1]/500), result[0]))
+    
+    for result in i:
         x1, y1, x2, y2, score, class_id = result
         label = class_names[class_id]
         output.append(label)
-    print(output)
-        
+        print(x1, math.floor(y1/500), label)
+    
+    
             
     
 
