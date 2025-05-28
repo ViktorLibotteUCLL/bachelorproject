@@ -12,9 +12,9 @@ const Header = () => {
                     style={styles.icons}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/settingsScreen")}>
+            <TouchableOpacity onPress={() => router.push("/conversionScreen")}>
                 <Image
-                    source={require("../assets/images/settings.png")}
+                    source={require("../assets/images/conversie.png")}
                     style={styles.icons}
                 />
             </TouchableOpacity>
