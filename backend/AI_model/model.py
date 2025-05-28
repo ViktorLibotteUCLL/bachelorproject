@@ -5,7 +5,12 @@ def main():
     model = YOLO("yolo11n.pt")
 
     results = model.train(
-        data="datasets/data.yaml", epochs=200, patience=50, name="half_cleaned"
+        data="datasets/data.yaml",
+        epochs=200,
+        patience=50,
+        name="cleaned_noflip",
+        fliplr=0.0,
+        flipud=0.0,
     )
     print(results)
     val_results = model.val()
