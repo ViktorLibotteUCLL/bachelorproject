@@ -8,17 +8,15 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import Header from "@/components/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets";
 import {
   Camera,
   CameraProps,
-  Point,
   useCameraDevice,
   useCameraFormat,
   useCameraPermission,
@@ -55,6 +53,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const zoom = useSharedValue(1);
   const isFocused = useIsFocused();
+  const [flash, setFlash] = useState<"off" | "on" | "auto">("off");
 
   const SCALE_FULL_ZOOM = 3;
   const MAX_ZOOM_FACTOR = 10;
@@ -135,15 +134,16 @@ export default function App() {
 
   const uploadImage = async (photo: any) => {
     const formData = new FormData();
-
+    console.log(photo.path);
     formData.append("image", {
-      uri: photo.uri,
+      uri: "file://" + photo.path,
       name: "photo.jpg",
       type: "image/jpeg",
     } as any);
+    console.log("Form data prepared for upload", formData);
 
     try {
-      const response = await fetch("https://api.braillo.tech/upload", {
+      const response = await fetch("https://devapi.braillo.tech/upload", {
         method: "POST",
         body: formData,
         headers: {
@@ -153,7 +153,6 @@ export default function App() {
       const data = await response.json();
       console.log("Upload success", data);
       if (data["response"]) {
-        console.log("hello");
         const jsonHistory = await AsyncStorage.getItem("history");
         console.log(jsonHistory);
         let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
@@ -170,9 +169,11 @@ export default function App() {
   };
 
   const takePicture = async () => {
+    const photo = await camera.current?.takePhoto({
+      flash: flash,
+      enableShutterSound: false,
+    });
     setIsLoading(true);
-    const photo = await ref.current?.takePictureAsync({ shutterSound: false });
-    console.log("Photo taken", photo);
     const response = await uploadImage(photo);
     if (!response || response["response"] === "") {
       setIsLoading(false);
@@ -210,6 +211,7 @@ export default function App() {
                 photoQualityBalance="quality"
                 format={format}
                 animatedProps={cameraAnimatedProps}
+                photo={true}
               ></ReanimatedCamera>
             </Reanimated.View>
           </PinchGestureHandler>
