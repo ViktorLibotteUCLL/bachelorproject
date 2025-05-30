@@ -1,19 +1,16 @@
 import { Pressable, StyleSheet, View, Button, Text } from "react-native";
 import { useEffect, useRef, useState } from "react";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Link, router } from "expo-router";
 import Header from "@/components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-} from "react-native-vision-camera";
 
 export default function App() {
-  const device = useCameraDevice("back");
-  const { hasPermission, requestPermission } = useCameraPermission();
+  const [facing, setFacing] = useState<CameraType>("back");
+  const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
@@ -35,15 +32,93 @@ export default function App() {
     );
   }
 
+  const uploadImage = async (photo: any) => {
+    const formData = new FormData();
+
+    formData.append("image", {
+      uri: photo.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    } as any);
+
+    try {
+      const response = await fetch("https://api.braillo.tech/upload", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "api-token": process.env.EXPO_PUBLIC_API_TOKEN as string,
+        },
+      });
+      const data = await response.json();
+      console.log("Upload success", data);
+      if (data["response"]) {
+        console.log("hello");
+        const jsonHistory = await AsyncStorage.getItem("history");
+        console.log(jsonHistory);
+        let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
+        // history[data["timestamp"]] = data["response"];
+        history.push(data);
+        console.log(history);
+        await AsyncStorage.setItem("history", JSON.stringify(history));
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Upload failed", error);
+    }
+  };
+
+  const takePicture = async () => {
+    setIsLoading(true);
+    const photo = await ref.current?.takePictureAsync({ shutterSound: false });
+    console.log("Photo taken", photo);
+    const response = await uploadImage(photo);
+    if (!response || response["response"] === "") {
+      setIsLoading(false);
+      return alert("No braille detected. Please try again.");
+    }
+    setIsLoading(false);
+    router.push({
+      pathname: "/translationScreen",
+      params: response,
+    });
+  };
+
   return (
     isFocused && (
       <View style={styles.container}>
         <Header />
-        <Camera
-          style={StyleSheet.absoluteFill}
-          device={device}
-          isActive={true}
-        ></Camera>
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          ref={ref}
+          flash={"auto"}
+          animateShutter={false}
+        >
+          <View style={styles.shutterContainer}>
+            <Pressable onPress={takePicture}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    styles.shutterBtn,
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                    },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.shutterBtnInner,
+                      {
+                        backgroundColor: "white",
+                      },
+                    ]}
+                  />
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </CameraView>
         {isLoading && (
           <View
             style={{
