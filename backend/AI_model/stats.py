@@ -3,11 +3,11 @@ from ultralytics import YOLO
 
 def main():
     model = YOLO(
-        "C://Users//Marthe//Documents//school//bp//bachelorproject//backend//runs//detect//train14//weights//best.pt"
+        "C:/Users/Marthe/Documents/school/bp/bachelorproject/backend/runs/detect/train14/weights/best.pt"
     )
 
     metrics = model.val(
-        data="C://Users//Marthe//Documents//school//bp//bachelorproject//backend//datasets//data.yaml",
+        data="C:/Users/Marthe/Documents/school/bp/bachelorproject/backend/datasets/data.yaml",
         split="test",
     )
 
