@@ -85,18 +85,6 @@ export default function App() {
     { photoResolution: "max" },
   ]);
 
-  if (!hasPermission) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
-
   const onPinchGesture = useAnimatedGestureHandler<
     PinchGestureHandlerGestureEvent,
     { startZoom?: number }
@@ -188,6 +176,18 @@ export default function App() {
       params: response,
     });
   };
+
+  if (!hasPermission) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
 
   return (
     isActive &&
