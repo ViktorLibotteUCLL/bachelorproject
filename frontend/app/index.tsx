@@ -34,6 +34,7 @@ import {
   PinchGestureHandler,
   PinchGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
+import { useIsForeground } from "@/hooks/useIsForeground";
 
 export default function App() {
   const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
@@ -53,6 +54,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const zoom = useSharedValue(1);
   const isFocused = useIsFocused();
+  const isForeground = useIsForeground();
+  const isActive = isFocused && isForeground;
   const [flash, setFlash] = useState<"off" | "on" | "auto">("off");
 
   const SCALE_FULL_ZOOM = 3;
@@ -187,13 +190,13 @@ export default function App() {
   };
 
   return (
-    isFocused &&
+    isActive &&
     device != null && (
       <GestureHandlerRootView style={styles.root}>
         <View style={styles.container}>
           <PinchGestureHandler
             onGestureEvent={onPinchGesture}
-            enabled={isFocused}
+            enabled={isActive}
           >
             <Reanimated.View
               onTouchEnd={onFocusTap}
