@@ -58,7 +58,7 @@ export default function RootLayout() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="settingsScreen"
+              name="conversionScreen"
               options={{ headerShown: false }}
             />
             <Stack.Screen
