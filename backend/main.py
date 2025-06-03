@@ -16,8 +16,8 @@ app = FastAPI()
 from ultralytics import YOLO
 
 model = YOLO(
-    # "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_1605//best.pt"
-    "C:/Users/basti/Documents/School/3de_jaar/Bachelorproef/bachelorproject/backend/runs/detect/train2705/best.pt"
+    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_3005//best.pt"
+    # "C:/Users/basti/Documents/School/3de_jaar/Bachelorproef/bachelorproject/backend/runs/detect/train2705/best.pt"
 )
 
 
