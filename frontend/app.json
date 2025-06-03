@@ -3,7 +3,7 @@
     "name": "Braillo",
     "slug": "braillo",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
     "scheme": "braillo",
     "userInterfaceStyle": "automatic",

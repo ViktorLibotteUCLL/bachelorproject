@@ -79,7 +79,9 @@ export default function App() {
     ios: Dimensions.get("window").height,
   }) as number;
 
-  const screenAspectRatio = SCREEN_HEIGHT / SCREEN_WIDTH;
+  const [cameraHeight, setCameraHeight] = useState<number | null>(null);
+
+  const screenAspectRatio = cameraHeight ? cameraHeight / SCREEN_WIDTH : 0;
   const format = useCameraFormat(device, [
     { photoAspectRatio: screenAspectRatio },
     { photoResolution: "max" },
@@ -194,54 +196,57 @@ export default function App() {
     device != null && (
       <GestureHandlerRootView style={styles.root}>
         <View style={styles.container}>
-          <PinchGestureHandler
-            onGestureEvent={onPinchGesture}
-            enabled={isActive}
-          >
-            <Reanimated.View
-              onTouchEnd={onFocusTap}
-              style={StyleSheet.absoluteFill}
-            >
-              <ReanimatedCamera
-                style={StyleSheet.absoluteFill}
-                device={device}
-                isActive={true}
-                ref={camera}
-                enableZoomGesture={false}
-                outputOrientation="device"
-                exposure={0}
-                // lowLightBoost={device.supportsLowLightBoost && enableNightMode}
-                photoQualityBalance="quality"
-                format={format}
-                animatedProps={cameraAnimatedProps}
-                photo={true}
-              ></ReanimatedCamera>
-            </Reanimated.View>
-          </PinchGestureHandler>
           <Header />
+
+          <View
+            style={styles.cameraWrapper}
+            onLayout={(event) => {
+              const { height } = event.nativeEvent.layout;
+              setCameraHeight(height);
+            }}
+          >
+            <PinchGestureHandler
+              onGestureEvent={onPinchGesture}
+              enabled={isActive}
+            >
+              <Reanimated.View
+                style={styles.cameraTouchArea}
+                onTouchEnd={onFocusTap}
+              >
+                <ReanimatedCamera
+                  style={styles.camera}
+                  device={device}
+                  isActive={true}
+                  ref={camera}
+                  enableZoomGesture={false}
+                  outputOrientation="device"
+                  exposure={0}
+                  photoQualityBalance="quality"
+                  format={format}
+                  animatedProps={cameraAnimatedProps}
+                  photo={true}
+                />
+              </Reanimated.View>
+            </PinchGestureHandler>
+          </View>
+
           <View style={styles.shutterContainer}>
             <Pressable onPress={takePicture}>
               {({ pressed }) => (
                 <View
-                  style={[
-                    styles.shutterBtn,
-                    {
-                      opacity: pressed ? 0.5 : 1,
-                    },
-                  ]}
+                  style={[styles.shutterBtn, { opacity: pressed ? 0.5 : 1 }]}
                 >
                   <View
                     style={[
                       styles.shutterBtnInner,
-                      {
-                        backgroundColor: "white",
-                      },
+                      { backgroundColor: "white" },
                     ]}
                   />
                 </View>
               )}
             </Pressable>
           </View>
+
           {isLoading && (
             <View
               style={{
@@ -261,6 +266,20 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  cameraWrapper: {
+    flex: 1, // take up all available vertical space between header and shutter
+    width: "100%",
+  },
+
+  cameraTouchArea: {
+    flex: 1,
+    width: "100%",
+  },
+
+  camera: {
+    flex: 1,
+    width: "100%",
+  },
   root: {
     flex: 1,
   },
@@ -272,19 +291,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingBottom: 10,
   },
-  camera: {
-    flex: 1,
-    width: "100%",
-  },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
   },
   shutterContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
     width: "100%",
     alignItems: "center",
     flexDirection: "row",
