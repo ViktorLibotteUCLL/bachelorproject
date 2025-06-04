@@ -25,7 +25,7 @@ function formatTimestamp(isoString: string) {
   return `${day} ${month} ${year} ${hours}:${minutes}`;
 }
 
-export default function historyScreen() {
+export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
   useEffect(() => {
     const fetchHistory = async () => {
