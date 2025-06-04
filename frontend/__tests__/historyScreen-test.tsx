@@ -4,6 +4,7 @@ import HistoryScreen from "../app/historyScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Alert } from "react-native";
+import formatTimestamp from "../utils/formatTimestamp";
 
 jest.mock("@react-native-async-storage/async-storage");
 jest.mock("expo-router", () => ({
@@ -35,7 +36,9 @@ describe("History Screen", () => {
       expect(getByTestId("historyScreen")).toBeTruthy();
       expect(getByText("History")).toBeTruthy();
       expect(getByText("Grip")).toBeTruthy();
-      // expect(getByText("12 May 2025 14:30")).toBeTruthy(); // Formatted date
+      expect(
+        getByText(formatTimestamp(mockHistory[0]["timestamp"]))
+      ).toBeTruthy();
     });
   });
 

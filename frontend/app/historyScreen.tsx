@@ -13,17 +13,7 @@ import CustomDropdown from "@/components/Dropdown";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-
-function formatTimestamp(isoString: string) {
-  const date = new Date(isoString);
-  const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "short" }); // "Dec"
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0"); // "13"
-  const minutes = String(date.getMinutes()).padStart(2, "0"); // "05"
-
-  return `${day} ${month} ${year} ${hours}:${minutes}`;
-}
+import formatTimestamp from "@/utils/formatTimestamp";
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
