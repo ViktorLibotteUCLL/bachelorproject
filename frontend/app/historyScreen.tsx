@@ -38,27 +38,32 @@ export default function historyScreen() {
   }, []);
 
   const clearHistory = () => {
-    return Alert.alert("Alert Title", "My Alert Msg", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          await AsyncStorage.removeItem("history");
-          setHistory([]);
+    return Alert.alert(
+      "Clear history",
+      "Are you sure you want to clear the history?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "OK",
+          onPress: async () => {
+            await AsyncStorage.removeItem("history");
+            setHistory([]);
+          },
+        },
+      ]
+    );
   };
 
   return (
     <View style={styles.contentContainer}>
-      <View style={styles.headingContainer}>
+      <View style={styles.headingContainer} testID="historyScreen">
         <TouchableOpacity
           onPress={() => router.push("/")}
           accessibilityLabel="Return to the camera"
+          testID="return"
         >
           <Image
             source={require("../assets/images/returnArrow.png")}
@@ -68,6 +73,7 @@ export default function historyScreen() {
         <TouchableOpacity
           onPress={() => clearHistory()}
           accessibilityLabel="Clear the history of previous requests"
+          testID="clearHistory"
         >
           <Image
             source={require("../assets/images/delete.png")}

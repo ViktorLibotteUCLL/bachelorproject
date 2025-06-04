@@ -11,9 +11,9 @@ import { router } from "expo-router";
 
 const ConversionScreen = () => {
   return (
-    <View style={styles.contentContainer}>
+    <View style={styles.contentContainer} testID="conversionScreen">
       <View style={styles.headingContainer}>
-        <TouchableOpacity onPress={() => router.push("/")}>
+        <TouchableOpacity onPress={() => router.push("/")} testID="return">
           <Image
             source={require("../assets/images/returnArrow.png")}
             style={styles.image}
@@ -22,8 +22,14 @@ const ConversionScreen = () => {
       </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Conversion Screen</Text>
-        <Text style={[styles.text, { borderBottomWidth: 1,
-              borderColor: "#ce2f4b" }]}>Letters</Text>
+        <Text
+          style={[
+            styles.text,
+            { borderBottomWidth: 1, borderColor: "#ce2f4b" },
+          ]}
+        >
+          Letters
+        </Text>
         <Image
           source={require("../assets/images/letters.png")}
           style={[
@@ -35,8 +41,14 @@ const ConversionScreen = () => {
           ]}
           accessibilityLabel="This table shows the conversion of letters to their corresponding characters in the Braille system. Each letter is represented by a unique combination of raised dots."
         />
-        <Text style={[styles.text, { marginBottom: 20, borderBottomWidth: 1,
-              borderColor: "#ce2f4b" }]}>Numbers</Text>
+        <Text
+          style={[
+            styles.text,
+            { marginBottom: 20, borderBottomWidth: 1, borderColor: "#ce2f4b" },
+          ]}
+        >
+          Numbers
+        </Text>
         <Image
           source={require("../assets/images/numbers.png")}
           style={[
@@ -48,8 +60,17 @@ const ConversionScreen = () => {
           ]}
           accessibilityLabel="This table shows the conversion of numbers to their corresponding characters in the Braille system. Each number is represented by a unique combination of raised dots. The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a or space is present."
         />
-        <Text style={[styles.text, { marginTop: 20, marginBottom: 30, borderBottomWidth: 1,
-              borderColor: "#ce2f4b", }]}>
+        <Text
+          style={[
+            styles.text,
+            {
+              marginTop: 20,
+              marginBottom: 30,
+              borderBottomWidth: 1,
+              borderColor: "#ce2f4b",
+            },
+          ]}
+        >
           Special Characters
         </Text>
         <Image

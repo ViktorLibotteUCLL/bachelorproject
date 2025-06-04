@@ -204,6 +204,7 @@ export default function App() {
               const { height } = event.nativeEvent.layout;
               setCameraHeight(height);
             }}
+            testID="camera"
           >
             <PinchGestureHandler
               onGestureEvent={onPinchGesture}
@@ -231,7 +232,7 @@ export default function App() {
           </View>
 
           <View style={styles.shutterContainer}>
-            <Pressable onPress={takePicture}>
+            <Pressable onPress={takePicture} testID="shutterButton">
               {({ pressed }) => (
                 <View
                   style={[styles.shutterBtn, { opacity: pressed ? 0.5 : 1 }]}
