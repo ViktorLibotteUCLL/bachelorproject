@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 
-const ConversionScreen = () => {
+export default function ConversionScreen() {
   return (
     <View style={styles.contentContainer} testID="conversionScreen">
       <View style={styles.headingContainer}>
@@ -27,6 +27,7 @@ const ConversionScreen = () => {
             styles.text,
             { borderBottomWidth: 1, borderColor: "#ce2f4b" },
           ]}
+          testID="lettersTitle"
         >
           Letters
         </Text>
@@ -40,12 +41,14 @@ const ConversionScreen = () => {
             },
           ]}
           accessibilityLabel="This table shows the conversion of letters to their corresponding characters in the Braille system. Each letter is represented by a unique combination of raised dots."
+          testID="lettersImage"
         />
         <Text
           style={[
             styles.text,
             { marginBottom: 20, borderBottomWidth: 1, borderColor: "#ce2f4b" },
           ]}
+          testID="numbersTitle"
         >
           Numbers
         </Text>
@@ -59,6 +62,7 @@ const ConversionScreen = () => {
             },
           ]}
           accessibilityLabel="This table shows the conversion of numbers to their corresponding characters in the Braille system. Each number is represented by a unique combination of raised dots. The number indicator indicates a sequence of numbers, every character after this indicator is a number until either a or space is present."
+          testID="numbersImage"
         />
         <Text
           style={[
@@ -70,6 +74,7 @@ const ConversionScreen = () => {
               borderColor: "#ce2f4b",
             },
           ]}
+          testID="specialCharactersTitle"
         >
           Special Characters
         </Text>
@@ -85,11 +90,12 @@ const ConversionScreen = () => {
             },
           ]}
           accessibilityLabel="This table shows the conversion of special characters to their corresponding characters in the Braille system. Each special character is represented by a unique combination of raised dots. The capital indicator indicates a capital, if one indicator is present only the next character is capitalised. If two indicators are present every following character is capitalised until either a space or the indicator to mark the end of capitalisation is present."
+          testID="specialCharactersImage"
         />
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -137,5 +143,3 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
-
-export default ConversionScreen;
