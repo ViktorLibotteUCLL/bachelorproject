@@ -127,7 +127,6 @@ export default function App() {
 
   const uploadImage = async (photo: any) => {
     const formData = new FormData();
-    console.log(photo.path);
     formData.append("image", {
       uri: "file://" + photo.path,
       name: "photo.jpg",
@@ -147,12 +146,12 @@ export default function App() {
       console.log("Upload success", data);
       if (data["response"]) {
         const jsonHistory = await AsyncStorage.getItem("history");
-        console.log(jsonHistory);
         let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
-        // history[data["timestamp"]] = data["response"];
-        history.push(data);
-        console.log(history);
-        await AsyncStorage.setItem("history", JSON.stringify(history));
+        if (history.length < 40) {
+          console.log("Adding to history", data);
+          history.push(data);
+          await AsyncStorage.setItem("history", JSON.stringify(history));
+        }
       }
 
       return data;
@@ -256,6 +255,7 @@ export default function App() {
                 justifyContent: "center",
                 zIndex: 10,
               }}
+              testID="loadingScreen"
             >
               <LoadingScreen />
             </View>
