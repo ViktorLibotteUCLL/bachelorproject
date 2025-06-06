@@ -1,9 +1,9 @@
 from ultralytics import YOLO
 import math
 
-imagefile = "C:/Users/Marthe/Downloads/image6.jpg"
+imagefile = "C:/Users/basti/Downloads/image4.jpg"
 model = YOLO(
-    "C:/Users/Marthe/Documents/school/bp/bachelorproject/backend/runs/detect/train14/weights/best.pt"
+    "C:/Users/basti/Documents/School/3de_jaar/Bachelorproef/bachelorproject/backend/runs/detect/train_3005/best.pt"
 )
 
 
@@ -28,7 +28,7 @@ def get_instances(image):
         avg_width = sum((r[2] - r[0]) for r in sorted_list) / len(sorted_list)
         print("avg width:", avg_width)
         for index in range(1, len(sorted_list)):
-            if (output[index][1] - output[index - 1][1]) > (2 * avg_width):
+            if abs(output[index][1] - output[index - 1][1]) > (2 * avg_width):
                 output_spaces.append(" ")
             output_spaces.append(output[index])
 
