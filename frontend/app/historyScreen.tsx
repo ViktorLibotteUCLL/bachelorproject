@@ -8,12 +8,11 @@ import {
   Button,
   Alert,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
-import CustomDropdown from "@/components/Dropdown";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import formatTimestamp from "@/utils/formatTimestamp";
+import React from "react";
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
@@ -22,7 +21,7 @@ export default function HistoryScreen() {
       const jsonHistory = await AsyncStorage.getItem("history");
       // console.log("hist", jsonHistory);
       setHistory(jsonHistory !== null ? JSON.parse(jsonHistory) : []);
-      console.log(history);
+      // console.log(history);
     };
     fetchHistory();
   }, []);
@@ -73,16 +72,12 @@ export default function HistoryScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>History</Text>
-        {history.map((element) => (
-          <>
-            <Text
-              key={element["timestamp"]}
-              style={[styles.text, { paddingTop: 10 }]}
-            >
+        {history.reverse().map((element) => (
+          <React.Fragment key={element["timestamp"]}>
+            <Text style={[styles.text, { paddingTop: 10 }]}>
               {formatTimestamp(element["timestamp"])}
             </Text>
             <Text
-              key={element["response"]}
               style={[
                 styles.text,
                 {
@@ -94,7 +89,7 @@ export default function HistoryScreen() {
             >
               {element["response"]}
             </Text>
-          </>
+          </React.Fragment>
         ))}
       </ScrollView>
     </View>
