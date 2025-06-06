@@ -26,14 +26,14 @@ def get_instances(image):
     if len(sorted_list) != 0:
         output_spaces = [output[0]]
         avg_width = sum((r[2] - r[0]) for r in sorted_list) / len(sorted_list)
-        print("avg width:", avg_width)
+        # print("avg width:", avg_width)
         for index in range(1, len(sorted_list)):
             if abs(output[index][1] - output[index - 1][1]) > (2 * avg_width):
                 output_spaces.append(" ")
             output_spaces.append(output[index])
 
-    print(output_spaces)
-    print([str(t[0]) for t in output_spaces])
+    # print(output_spaces)
+    # print([str(t[0]) for t in output_spaces])
     return output_spaces
 
 
