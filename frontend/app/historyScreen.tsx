@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import formatTimestamp from "@/utils/formatTimestamp";
 import React from "react";
+import * as Clipboard from "expo-clipboard";
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
@@ -25,6 +26,10 @@ export default function HistoryScreen() {
     };
     fetchHistory();
   }, []);
+
+  const copyToClipboard = async (history: string) => {
+    await Clipboard.setStringAsync(history);
+  };
 
   const clearHistory = () => {
     return Alert.alert(
@@ -77,7 +82,8 @@ export default function HistoryScreen() {
             <Text style={[styles.text, { paddingTop: 10 }]}>
               {formatTimestamp(element["timestamp"])}
             </Text>
-            <Text
+            <TouchableOpacity
+              onPress={async () => await copyToClipboard(element["response"])}
               style={[
                 styles.text,
                 {
@@ -87,8 +93,8 @@ export default function HistoryScreen() {
                 },
               ]}
             >
-              {element["response"]}
-            </Text>
+              <Text style={[styles.text]}>{element["response"]}</Text>
+            </TouchableOpacity>
           </React.Fragment>
         ))}
       </ScrollView>

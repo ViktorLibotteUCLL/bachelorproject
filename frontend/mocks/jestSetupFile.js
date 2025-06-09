@@ -24,18 +24,43 @@ jest.mock("expo-router", () => {
   };
 });
 
-jest.mock("react-native-vision-camera", () => ({
-  Camera: (props) => <>{props.children}</>, // Just render children or a View
-  useCameraDevice: () => ({ minZoom: 1, maxZoom: 10 }),
-  useCameraFormat: jest.fn(() => ({
-    photoResolution: "max",
-    photoAspectRatio: 1.5,
-  })),
-  useCameraPermission: () => ({
-    hasPermission: true,
-    requestPermission: jest.fn(),
-  }),
-}));
+// jest.mock("react-native-vision-camera", () => ({
+//   Camera: (props) => <>{props.children}</>, // Just render children or a View
+//   useCameraDevice: () => ({ minZoom: 1, maxZoom: 10 }),
+//   useCameraFormat: jest.fn(() => ({
+//     photoResolution: "max",
+//     photoAspectRatio: 1.5,
+//   })),
+//   useCameraPermission: () => ({
+//     hasPermission: true,
+//     requestPermission: jest.fn(),
+//   }),
+// }));
+jest.mock("react-native-vision-camera", () => {
+  const React = require("react");
+
+  return {
+    Camera: React.forwardRef((props, ref) => {
+      React.useImperativeHandle(ref, () => ({
+        takePhoto: jest.fn(() =>
+          Promise.resolve({
+            path: "mock/path/to/photo.jpg",
+          })
+        ),
+      }));
+      return <>{props.children}</>; // or a View
+    }),
+    useCameraDevice: () => ({ id: "mockCamera", name: "Back Camera" }),
+    useCameraFormat: jest.fn(() => ({
+      photoResolution: "max",
+      photoAspectRatio: 1.5,
+    })),
+    useCameraPermission: () => ({
+      hasPermission: true,
+      requestPermission: jest.fn(),
+    }),
+  };
+});
 
 jest.mock("react-native-gesture-handler", () => {
   const View = require("react-native").View;

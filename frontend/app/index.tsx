@@ -7,6 +7,7 @@ import {
   GestureResponderEvent,
   Dimensions,
   Platform,
+  Alert,
 } from "react-native";
 import { useCallback, useRef, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
@@ -35,6 +36,7 @@ import {
   PinchGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import { useIsForeground } from "@/hooks/useIsForeground";
+import uploadImage from "@/utils/uploadImage";
 
 export default function App() {
   const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
@@ -125,40 +127,40 @@ export default function App() {
     [device?.supportsFocus]
   );
 
-  const uploadImage = async (photo: any) => {
-    const formData = new FormData();
-    formData.append("image", {
-      uri: "file://" + photo.path,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    } as any);
-    console.log("Form data prepared for upload", formData);
+  // const uploadImage = async (photo: any) => {
+  //   const formData = new FormData();
+  //   formData.append("image", {
+  //     uri: "file://" + photo.path,
+  //     name: "photo.jpg",
+  //     type: "image/jpeg",
+  //   } as any);
+  //   console.log("Form data prepared for upload", formData);
 
-    try {
-      const response = await fetch("https://devapi.braillo.tech/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "api-token": process.env.EXPO_PUBLIC_API_TOKEN as string,
-        },
-      });
-      const data = await response.json();
-      console.log("Upload success", data);
-      if (data["response"]) {
-        const jsonHistory = await AsyncStorage.getItem("history");
-        let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
-        if (history.length < 40) {
-          console.log("Adding to history", data);
-          history.push(data);
-          await AsyncStorage.setItem("history", JSON.stringify(history));
-        }
-      }
+  //   try {
+  //     const response = await fetch("https://devapi.braillo.tech/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //       headers: {
+  //         "api-token": process.env.EXPO_PUBLIC_API_TOKEN as string,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     console.log("Upload success", data);
+  //     if (data["response"]) {
+  //       const jsonHistory = await AsyncStorage.getItem("history");
+  //       let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
+  //       if (history.length < 40) {
+  //         console.log("Adding to history", data);
+  //         history.push(data);
+  //         await AsyncStorage.setItem("history", JSON.stringify(history));
+  //       }
+  //     }
 
-      return data;
-    } catch (error) {
-      console.error("Upload failed", error);
-    }
-  };
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Upload failed", error);
+  //   }
+  // };
 
   const takePicture = async () => {
     const photo = await camera.current?.takePhoto({
@@ -169,7 +171,7 @@ export default function App() {
     const response = await uploadImage(photo);
     if (!response || response["response"] === "") {
       setIsLoading(false);
-      return alert("No braille detected. Please try again.");
+      return Alert.alert("No braille detected. Please try again.");
     }
     setIsLoading(false);
     router.push({
