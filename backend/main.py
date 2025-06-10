@@ -114,10 +114,22 @@ special_characters = {
     "dash": "-",
     "period": ".",
     "apostrophe": "'",
-    "parenthesis": "()",  # i dont know how they work so for now ill just put them as ()
     "dot_4": ".4",  # IDK
     "dot_5": ".5",  # IDK
 }
+
+letters_to_numbers = [
+    "j",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+]
 
 
 def format_output_string(output):
@@ -147,12 +159,15 @@ def format_output_string(output):
             continue
         if char in special_characters.keys():
             formatted_output += special_characters[char]
-            number = False
             continue
-        if number is True:
-            char_to_number = char
-            formatted_output += char_to_number
+        if number is True and char in letters_to_numbers:
+            formatted_output += letters_to_numbers.index(char)
             continue
+        if number is True and char.isdigit():
+            formatted_output += char
+            continue
+        if char.isdigit():
+            char = letters_to_numbers[number(char)]
         if shift is True or caps_lock is True:
             formatted_output += char.upper()
             shift = False
