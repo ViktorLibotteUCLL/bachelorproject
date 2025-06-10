@@ -221,7 +221,7 @@ export default function App() {
                   isActive={true}
                   ref={camera}
                   enableZoomGesture={false}
-                  outputOrientation="device"
+                  outputOrientation="preview"
                   exposure={0}
                   photoQualityBalance="quality"
                   format={format}
@@ -233,7 +233,11 @@ export default function App() {
           </View>
 
           <View style={styles.shutterContainer}>
-            <Pressable onPress={takePicture} testID="shutterButton">
+            <Pressable
+              onPress={takePicture}
+              accessibilityLabel="Shutter button, double tap to take a picture."
+              testID="shutterButton"
+            >
               {({ pressed }) => (
                 <View
                   style={[styles.shutterBtn, { opacity: pressed ? 0.5 : 1 }]}
@@ -272,6 +276,9 @@ const styles = StyleSheet.create({
   cameraWrapper: {
     flex: 1, // take up all available vertical space between header and shutter
     width: "100%",
+    // aspectRatio: 9 / 16, // or 9 / 16 for classic portrait
+    // backgroundColor: "black",
+    // alignSelf: "center",
   },
 
   cameraTouchArea: {

@@ -26,6 +26,7 @@ const TranslationScreen = () => {
         <TouchableOpacity onPress={() => router.push("/")}>
           <Image
             source={require("../assets/images/returnArrow.png")}
+            accessibilityLabel="Return to the camera"
             style={styles.image}
           />
         </TouchableOpacity>
@@ -37,8 +38,15 @@ const TranslationScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{translations}</Text>
+      <View
+        style={styles.textContainer}
+        accessible={true}
+        accessibilityRole="text"
+        accessibilityLabel={`Translation: ${translations}`}
+      >
+        <Text style={styles.text} accessible={false}>
+          {translations}
+        </Text>
       </View>
     </ScrollView>
   );

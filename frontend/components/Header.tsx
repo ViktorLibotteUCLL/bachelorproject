@@ -8,6 +8,7 @@ const Header = () => {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => router.push("/historyScreen")}
+        accessibilityLabel="History, list the history of previous conversions."
         testID="history"
       >
         <Image
@@ -17,6 +18,7 @@ const Header = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => router.push("/conversionScreen")}
+        accessibilityLabel="Conversion tables, shows conversion tables for letters, numbers, and special characters."
         testID="conversion"
       >
         <Image

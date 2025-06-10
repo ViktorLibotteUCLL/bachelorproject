@@ -13,7 +13,11 @@ export default function ConversionScreen() {
   return (
     <View style={styles.contentContainer} testID="conversionScreen">
       <View style={styles.headingContainer}>
-        <TouchableOpacity onPress={() => router.push("/")} testID="return">
+        <TouchableOpacity
+          onPress={() => router.push("/")}
+          accessibilityLabel="Return to the camera"
+          testID="return"
+        >
           <Image
             source={require("../assets/images/returnArrow.png")}
             style={styles.image}
