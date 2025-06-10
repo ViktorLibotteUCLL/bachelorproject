@@ -28,6 +28,9 @@ def get_instances(image):
     results.save(filename="result.jpg")
     class_names = model.names
     output = []
+
+    if len(results.boxes.data.tolist()) == 0:
+        return []
     if len(results.boxes.data.tolist()) != 0:
         avg_width = sum((r[2] - r[0]) for r in results.boxes.data.tolist()) / len(
             results.boxes.data.tolist()
