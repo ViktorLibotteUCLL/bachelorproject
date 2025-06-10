@@ -37,6 +37,7 @@ import {
 } from "react-native-gesture-handler";
 import { useIsForeground } from "@/hooks/useIsForeground";
 import uploadImage from "@/utils/uploadImage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function App() {
   const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
@@ -59,6 +60,7 @@ export default function App() {
   const isForeground = useIsForeground();
   const isActive = isFocused && isForeground;
   const [flash, setFlash] = useState<"off" | "on" | "auto">("off");
+  const insets = useSafeAreaInsets();
 
   const SCALE_FULL_ZOOM = 3;
   const MAX_ZOOM_FACTOR = 10;
@@ -232,7 +234,12 @@ export default function App() {
             </PinchGestureHandler>
           </View>
 
-          <View style={styles.shutterContainer}>
+          <View
+            style={[
+              styles.shutterContainer,
+              { paddingBottom: Math.max(30, insets.bottom + 10) },
+            ]}
+          >
             <Pressable
               onPress={takePicture}
               accessibilityLabel="Shutter button, double tap to take a picture."
@@ -313,8 +320,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 30,
     backgroundColor: "black",
-    height: 140,
-    paddingBottom: 30,
+    height: 150,
+    paddingTop: 15,
   },
   shutterBtn: {
     backgroundColor: "transparent",
