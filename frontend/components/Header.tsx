@@ -6,13 +6,19 @@ import { Link, router } from "expo-router";
 const Header = () => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.push("/historyScreen")}>
+      <TouchableOpacity
+        onPress={() => router.push("/historyScreen")}
+        testID="history"
+      >
         <Image
           source={require("../assets/images/history.png")}
           style={styles.icons}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("/conversionScreen")}>
+      <TouchableOpacity
+        onPress={() => router.push("/conversionScreen")}
+        testID="conversion"
+      >
         <Image
           source={require("../assets/images/conversie.png")}
           style={styles.icons}

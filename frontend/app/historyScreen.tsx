@@ -8,57 +8,56 @@ import {
   Button,
   Alert,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
-import CustomDropdown from "@/components/Dropdown";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import formatTimestamp from "@/utils/formatTimestamp";
+import React from "react";
+import * as Clipboard from "expo-clipboard";
 
-function formatTimestamp(isoString: string) {
-  const date = new Date(isoString);
-  const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "short" }); // "Dec"
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0"); // "13"
-  const minutes = String(date.getMinutes()).padStart(2, "0"); // "05"
-
-  return `${day} ${month} ${year} ${hours}:${minutes}`;
-}
-
-export default function historyScreen() {
+export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
   useEffect(() => {
     const fetchHistory = async () => {
       const jsonHistory = await AsyncStorage.getItem("history");
       // console.log("hist", jsonHistory);
       setHistory(jsonHistory !== null ? JSON.parse(jsonHistory) : []);
-      console.log(history);
+      // console.log(history);
     };
     fetchHistory();
   }, []);
 
+  const copyToClipboard = async (history: string) => {
+    await Clipboard.setStringAsync(history);
+  };
+
   const clearHistory = () => {
-    return Alert.alert("Alert Title", "My Alert Msg", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          await AsyncStorage.removeItem("history");
-          setHistory([]);
+    return Alert.alert(
+      "Clear history",
+      "Are you sure you want to clear the history?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "OK",
+          onPress: async () => {
+            await AsyncStorage.removeItem("history");
+            setHistory([]);
+          },
+        },
+      ]
+    );
   };
 
   return (
     <View style={styles.contentContainer}>
-      <View style={styles.headingContainer}>
+      <View style={styles.headingContainer} testID="historyScreen">
         <TouchableOpacity
           onPress={() => router.push("/")}
           accessibilityLabel="Return to the camera"
+          testID="return"
         >
           <Image
             source={require("../assets/images/returnArrow.png")}
@@ -68,6 +67,7 @@ export default function historyScreen() {
         <TouchableOpacity
           onPress={() => clearHistory()}
           accessibilityLabel="Clear the history of previous requests"
+          testID="clearHistory"
         >
           <Image
             source={require("../assets/images/delete.png")}
@@ -77,16 +77,13 @@ export default function historyScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>History</Text>
-        {history.map((element) => (
-          <>
-            <Text
-              key={element["timestamp"]}
-              style={[styles.text, { paddingTop: 10 }]}
-            >
+        {history.reverse().map((element) => (
+          <React.Fragment key={element["timestamp"]}>
+            <Text style={[styles.text, { paddingTop: 10 }]}>
               {formatTimestamp(element["timestamp"])}
             </Text>
-            <Text
-              key={element["response"]}
+            <TouchableOpacity
+              onPress={async () => await copyToClipboard(element["response"])}
               style={[
                 styles.text,
                 {
@@ -96,9 +93,9 @@ export default function historyScreen() {
                 },
               ]}
             >
-              {element["response"]}
-            </Text>
-          </>
+              <Text style={[styles.text]}>{element["response"]}</Text>
+            </TouchableOpacity>
+          </React.Fragment>
         ))}
       </ScrollView>
     </View>

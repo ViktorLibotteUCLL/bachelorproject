@@ -1,0 +1,21 @@
+appId: com.disasterisk.braillo
+---
+- launchApp
+- assertVisible:
+    id: "history"
+- tapOn:
+    id: "history"
+- assertVisible:
+    id: "historyScreen"
+- assertVisible:
+    id: "clearHistory"
+- tapOn:
+    id: "clearHistory"
+- assertVisible: "Clear history"
+- assertVisible: "Are you sure you want to clear the history?"
+- tapOn: "Cancel"
+- tapOn:
+    id: "clearHistory"
+- tapOn: "Ok"
+- tapOn:
+    id: "return"

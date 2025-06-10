@@ -16,7 +16,8 @@ app = FastAPI()
 from ultralytics import YOLO
 
 model = YOLO(
-    "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_3005//best.pt"
+    # "C://Users//viktorLibotte//Desktop//bachelorproject//backend//runs//detect//train_3005//best.pt"
+    "./runs/detect/cleaned_noflip4/weights/best.pt"
     # "C:/Users/basti/Documents/School/3de_jaar/Bachelorproef/bachelorproject/backend/runs/detect/train2705/best.pt"
 )
 
@@ -27,16 +28,37 @@ def get_instances(image):
     results.save(filename="result.jpg")
     class_names = model.names
     output = []
-    i = sorted(
+    if len(results.boxes.data.tolist()) != 0:
+        avg_width = sum((r[2] - r[0]) for r in results.boxes.data.tolist()) / len(
+            results.boxes.data.tolist()
+        )
+        avg_height = sum((r[3] - r[1]) for r in results.boxes.data.tolist()) / len(
+            results.boxes.data.tolist()
+        )
+    # midpoints = []
+    sorted_list = sorted(
         results.boxes.data.tolist(),
-        key=lambda result: (math.floor(result[1] / 500), result[0]),
+        key=lambda result: (math.floor(result[1] / (avg_height / 2)), result[0]),
     )
-    for result in i:
+    for result in sorted_list:
         x1, y1, x2, y2, score, class_id = result
         label = class_names[class_id]
         output.append([label, x1, y1])
-    # print(output)
-    return output
+    print("sorted list:", output)
+    # midpoints.append([label, x1 + x2 / 2, y1 + y2 / 2])
+    if len(sorted_list) != 0:
+        output_spaces = [output[0]]
+        # avg_width = sum((r[2] - r[0]) for r in sorted_list) / len(sorted_list)
+        # print("avg width:", avg_width)
+        for index in range(1, len(sorted_list)):
+            if abs(output[index][1] - output[index - 1][1]) > (2 * avg_width):
+                output_spaces.append(" ")
+            output_spaces.append(output[index])
+
+    # print(output_spaces)
+    # print([str(t[0]) for t in output_spaces])
+    print("output:", output_spaces)
+    return output_spaces
 
 
 @app.middleware("http")
@@ -79,14 +101,72 @@ def correct_image_orientation(image: Image.Image) -> Image.Image:
     return image
 
 
+special_characters = {
+    "space": " ",
+    "colon": ":",
+    "comma": ",",
+    "semicolon": ";",
+    "exclamation": "!",
+    "question": "?",
+    "dash": "-",
+    "period": ".",
+    "apostrophe": "'",
+    "parenthesis": "()",  # i dont know how they work so for now ill just put them as ()
+    "dot_4": ".4",  # IDK
+    "dot_5": ".5",  # IDK
+}
+
+
+def format_output_string(output):
+    print(output)
+    shift = False
+    caps_lock = False
+    number = False
+    formatted_output = ""
+    for char in output:
+        char = char[0]
+        print(char)
+        if char == "capital":
+            if shift is True:
+                caps_lock = True
+                shift = False
+                continue
+            shift = True
+            continue
+        if char == " ":
+            formatted_output += " "
+            shift = False
+            caps_lock = False
+            number = False
+            continue
+        if char == "number":
+            number = True
+            continue
+        if char in special_characters.keys():
+            formatted_output += special_characters[char]
+            number = False
+            continue
+        if number is True:
+            char_to_number = char
+            formatted_output += char_to_number
+            continue
+        if shift is True or caps_lock is True:
+            formatted_output += char.upper()
+            shift = False
+            continue
+        formatted_output += char.lower()
+    print(formatted_output)
+    return formatted_output
+
+
 @app.post("/upload")
 async def upload_image(image: UploadFile = File(...)):
     image = await image.read()
     pil_image = Image.open(io.BytesIO(image)).convert("RGB")
     pil_image = correct_image_orientation(pil_image)
     response = get_instances(pil_image)
-    prediction = "".join([char[0] for char in response])
-    return {"response": prediction, "timestamp": datetime.datetime.now().isoformat()}
+    response = format_output_string(response)
+    return {"response": response, "timestamp": datetime.datetime.now().isoformat()}
 
 
 @app.get("/items/{item_id}")
