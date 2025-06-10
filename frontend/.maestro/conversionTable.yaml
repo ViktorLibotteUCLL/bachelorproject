@@ -1,0 +1,12 @@
+appId: com.disasterisk.braillo
+---
+- launchApp
+- assertVisible:
+    id: "conversion"
+- tapOn:
+    id: "conversion"
+- assertVisible:
+    id: "conversionScreen"
+- scroll
+- tapOn:
+    id: "return"

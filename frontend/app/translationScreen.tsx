@@ -10,10 +10,15 @@ import {
 import { useState, useEffect } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { router, useLocalSearchParams } from "expo-router";
+import * as Clipboard from "expo-clipboard";
 
 const TranslationScreen = () => {
   const params = useLocalSearchParams();
   const [translations, setTranslations] = useState(params["response"]);
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(translations);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -22,6 +27,13 @@ const TranslationScreen = () => {
           <Image
             source={require("../assets/images/returnArrow.png")}
             style={styles.image}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={copyToClipboard}>
+          <Image
+            source={require("../assets/images/copy.png")}
+            style={styles.icons}
+            accessibilityLabel="Copy translation"
           />
         </TouchableOpacity>
       </View>
@@ -41,11 +53,17 @@ const styles = StyleSheet.create({
   headingContainer: {
     marginTop: 10,
     marginBottom: 30,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   image: {
     width: 60,
     height: 40,
     borderRadius: 10,
+  },
+  icons: {
+    width: 40,
+    height: 40,
   },
   textContainer: {
     alignSelf: "center",

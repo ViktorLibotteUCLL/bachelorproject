@@ -1,0 +1,12 @@
+appId: com.disasterisk.braillo
+---
+- launchApp
+- assertVisible:
+    id: "camera"
+- tapOn:
+    id: "shutterButton"
+# - assertVisible:
+#     id: "loadingScreen"
+# - assertVisible: "Loading, please wait..."
+- assertVisible: "No braille detected. Please try again."
+- tapOn: "Ok"
