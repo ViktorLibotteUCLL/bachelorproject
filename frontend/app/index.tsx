@@ -9,7 +9,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { router } from "expo-router";
@@ -64,6 +64,12 @@ export default function App() {
 
   const SCALE_FULL_ZOOM = 3;
   const MAX_ZOOM_FACTOR = 10;
+
+  useEffect(() => {
+    if (isActive) {
+      setCameraHeight(null);
+    }
+  }, [isActive]);
 
   const minZoom = device?.minZoom ?? 1;
   const maxZoom = Math.min(device?.maxZoom ?? 1, MAX_ZOOM_FACTOR);
