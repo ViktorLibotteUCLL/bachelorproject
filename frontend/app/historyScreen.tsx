@@ -77,6 +77,9 @@ export default function HistoryScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>History</Text>
+        <Text style={[styles.text, {fontSize: 18, color: "#00000033"}]}>
+          Tap the history item you want to copy to clipboard.
+        </Text>
         {history.reverse().map((element) => (
           <React.Fragment key={element["timestamp"]}>
             <Text style={[styles.text, { paddingTop: 10 }]}>
