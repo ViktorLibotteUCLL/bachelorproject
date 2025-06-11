@@ -22,11 +22,12 @@ export default async function uploadImage(photo: any) {
     if (data["response"]) {
       const jsonHistory = await AsyncStorage.getItem("history");
       let history: any[] = jsonHistory != null ? JSON.parse(jsonHistory) : [];
-      if (history.length < 40) {
-        console.log("Adding to history", data);
-        history.push(data);
-        await AsyncStorage.setItem("history", JSON.stringify(history));
+      if (history.length == 40) {
+        history = history.slice(1); // Remove the oldest entry if we have 40
       }
+      console.log("Adding to history", data);
+      history.push(data);
+      await AsyncStorage.setItem("history", JSON.stringify(history));
     }
     return data;
   } catch (error) {

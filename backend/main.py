@@ -31,35 +31,67 @@ def get_instances(image):
 
     if len(results.boxes.data.tolist()) == 0:
         return []
-    if len(results.boxes.data.tolist()) != 0:
-        avg_width = sum((r[2] - r[0]) for r in results.boxes.data.tolist()) / len(
-            results.boxes.data.tolist()
-        )
-        avg_height = sum((r[3] - r[1]) for r in results.boxes.data.tolist()) / len(
-            results.boxes.data.tolist()
-        )
-    # midpoints = []
-    sorted_list = sorted(
-        results.boxes.data.tolist(),
-        key=lambda result: (math.floor(result[1] / (avg_height / 2)), result[0]),
-    )
-    for result in sorted_list:
-        x1, y1, x2, y2, score, class_id = result
-        label = class_names[class_id]
-        output.append([label, x1, y1])
-    print("sorted list:", output)
-    # midpoints.append([label, x1 + x2 / 2, y1 + y2 / 2])
-    if len(sorted_list) != 0:
-        output_spaces = [output[0]]
-        # avg_width = sum((r[2] - r[0]) for r in sorted_list) / len(sorted_list)
-        # print("avg width:", avg_width)
-        for index in range(1, len(sorted_list)):
-            if abs(output[index][1] - output[index - 1][1]) > (2 * avg_width):
-                output_spaces.append(" ")
-            output_spaces.append(output[index])
 
-    # print(output_spaces)
-    # print([str(t[0]) for t in output_spaces])
+    boxes = results.boxes.data.tolist()
+    if len(boxes) == 0:
+        return []
+
+    avg_width = sum((r[2] - r[0]) for r in boxes) / len(boxes)
+    avg_height = sum((r[3] - r[1]) for r in boxes) / len(boxes)
+
+    # Step 1: Group boxes into rows based on vertical overlap
+    rows = []
+    for box in boxes:
+        x1, y1, x2, y2, score, class_id = box
+        center_y = (y1 + y2) / 2
+
+        # Find which row this box belongs to
+        placed = False
+        for row in rows:
+            # Check if this box vertically overlaps with any box in the row
+            for existing_box in row:
+                existing_center_y = (existing_box[1] + existing_box[3]) / 2
+                if abs(center_y - existing_center_y) < avg_height * 0.6:
+                    row.append(box)
+                    placed = True
+                    break
+            if placed:
+                break
+
+        if not placed:
+            rows.append([box])
+
+    # Step 2: Sort rows by their vertical position (top to bottom)
+    rows.sort(key=lambda row: min((box[1] + box[3]) / 2 for box in row))
+
+    # Step 3: Sort boxes within each row by horizontal position (left to right)
+    for row in rows:
+        row.sort(key=lambda box: box[0])
+
+    # Step 4: Build the final output with proper spacing
+    output_spaces = []
+
+    for row_index, row in enumerate(rows):
+        if row_index > 0:
+            # Add line break between rows
+            output_spaces.append(" ")
+
+        for box_index, box in enumerate(row):
+            x1, y1, x2, y2, score, class_id = box
+            label = class_names[class_id]
+
+            if box_index > 0:
+                # Check if we need a space between words in the same row
+                prev_box = row[box_index - 1]
+                horizontal_gap = (
+                    x1 - prev_box[2]
+                )  # Gap between end of previous box and start of current box
+
+                if horizontal_gap > avg_width * 0.8:  # Adjust threshold as needed
+                    output_spaces.append(" ")
+
+            output_spaces.append([label, x1, y1])
+
     print("output:", output_spaces)
     return output_spaces
 
@@ -167,7 +199,7 @@ def format_output_string(output):
             formatted_output += char
             continue
         if char.isdigit():
-            char = letters_to_numbers[number(char)]
+            char = letters_to_numbers[int(char)]
         if shift is True or caps_lock is True:
             formatted_output += char.upper()
             shift = False
