@@ -2,13 +2,13 @@ from ultralytics import YOLO
 
 
 def main():
-    model = YOLO("yolo11n.pt")
+    model = YOLO("yolo12n.pt")
 
     results = model.train(
         data="datasets/data.yaml",
-        epochs=200,
-        patience=10,
-        name="cleaned_noflip",
+        epochs=250,
+        patience=25,
+        name="last_model",
         fliplr=0.0,
         flipud=0.0,
     )
